@@ -25,8 +25,9 @@ $.fn.generaMenu = function(menu) {
          var elementoPrincipal = $('<li class="ui-corner-top"></li>');
          listaPrincipal.append(elementoPrincipal);
          //creo el enlace e inserto
-         var enlacePrincipal = $('<a   title="'+this.texto+'" href="' + this.url + '"><i class="glyphicon ' + this.icon + '"></i> &nbsp' + this.texto + '</a>');
-         elementoPrincipal.append(enlacePrincipal);
+         var enlacePrincipal = $('<a title="'+this.texto+'" href="' + this.url + '"><i class="glyphicon ' + this.icon + '"></i> &nbsp' + this.texto + '</a>');
+                
+          elementoPrincipal.append(enlacePrincipal);
          
          t = this.enlaces.length;
          //
@@ -47,10 +48,13 @@ $.fn.generaMenu = function(menu) {
             //meto el elemento de la lista en la lista
             subLista.append(subElemento);
             //creo el enlace
-            var subEnlace = $('<a title="" class="hra" href="' + this.url + '"><i class="glyphicon ' + this.icon + '"></i> &nbsp' + this.texto + '</a>');
+            var subEnlace = $('<a title="" href="' + this.url + '"><i class="glyphicon ' + this.icon + '"></i> &nbsp' + this.texto + '</a>');
             //cargo el enlace en la lista
             subElemento.append(subEnlace);
-
+           /* $.post('../../../controller/IndexController.php', 'controller=Index&action=Submenu&idmodulo='+this.idmodulo, function() {
+                   
+                });*/
+                
          });
          //inserto la capa del submenu en el cuerpo de la página
          $(document.body).append(capaSubmenu);
@@ -120,7 +124,7 @@ $.fn.generaMenu = function(menu) {
                var posicionEnlace = arrayLiMenuPrincipal[i].offset();
                this.css({
                   left: posicionEnlace.left,
-                  top: posicionEnlace.top + 34
+                  top: posicionEnlace.top + 32
                });
             });
          }
