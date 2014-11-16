@@ -1,3 +1,7 @@
+<div class="div_container">
+    
+<h6 class="ui-widget-header">Nuevo P</h6>
+
 <?php  include("../lib/functions.php"); ?>
 <script type="text/javascript" src="js/app/evt_form_proyecto.js" ></script>
 <script type="text/javascript" src="js/validateradiobutton.js"></script>
@@ -80,7 +84,7 @@
                                 }?>
                     </div>
                     <div class="col-md-4">
-                        <span class="input-group-addon"><strong for="distrito">DISTRITO---:</strong></span>
+                        <span class="input-group-addon"><strong for="distrito">DISTRITO:</strong></span>
                         <?php if(!isset($distrito)){ ?>
                         <select id="distrito" name="distrito" class="form-control" style="width: 100%;">
                             <option value="">...</option>
@@ -90,8 +94,7 @@
                                 echo $distrito;
                                 }?>
                     </div>
-                       
-                        
+                          
                     </div>
                     <div class="col-md-12">
                         <div class="col-md-4">
@@ -396,4 +399,5 @@
     </div>
 
     </div>
+
 

@@ -1,6 +1,6 @@
  
 <?php $semestres=$_GET["semestre"];?>
-            <?php echo "<script>alert('$semestres');</script>"?>
+            <?php //echo "<script>alert('$semestres');</script>"?>
 <option value="">......</option>
     <?php foreach ($rows as $key => $value) { ?>
         <?php if ($code != $value[0] ) { ?>

@@ -10,7 +10,8 @@ SEMESTRE : <div style="width:160px;display: inline-block;"><?php echo $semestrea
         <div  class="col-sm-12 col-md-12 ">
             <div id="alumnos">
             <iframe id="iframe_buscar_alumno"src="index.php?controller=alumno&action=search_por_facultad&fac=<?php echo $idfacultad;?>&sinCab=true" width="900" height="530"  marginwidth="0" noresize scrolling="No" frameborder="0">
-                        
+            
+            
             </iframe>
             </div>
         </div>

@@ -1,13 +1,36 @@
 <?php  include("../lib/functions.php"); ?>
-<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="dist/css/bootstrapValidator.css"/>
-<script type="text/javascript" src="js/jdada.js"></script>
-    <script type="text/javascript" src="dist/js/bootstrapValidator.js"></script>
-<script type="text/javascript" src="js/menus.js"></script>
-
+<script type="text/javascript" src="js/jquery.cleditor.min.js"></script>
 <script type="text/javascript" src="js/app/evt_form_proyecto.js" ></script>
-<script type="text/javascript" src="js/validateradiobutton.js"></script>
+<script type="text/javascript" src="js/tinymce/tinymce.min.js"></script>
+
+<script type="text/javascript">
+tinymce.init({
+    selector: "textarea",
+    theme: "modern",
+    plugins: [
+        //"advlist autolink lists link image charmap print preview hr anchor pagebreak",
+        //"searchreplace wordcount visualblocks visualchars code fullscreen"
+        "insertdatetime media nonbreaking save table contextmenu directionality"
+        //"emoticons template paste textcolor colorpicker textpattern"
+    ]
+    //toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+    //toolbar2: "print preview media | forecolor backcolor emoticons",
+    //image_advtab: true,
+//    templates: [
+//        {title: 'Test template 1', content: 'Test 1'},
+//        {title: 'Test template 2', content: 'Test 2'}
+//    ]
+});
+</script>
+
+
+
+<style>
+    .required{
+        border-color: #ff0000;
+        border: 1px solid #ff0000;
+    }
+</style>
 
     <link href="css/formproyecto.css" rel="stylesheet" type="text/css" />
         <h6 class="ui-widget-header"><?php if($_GET['id']==''){     echo 'niger';
@@ -29,12 +52,12 @@
     <input type="hidden" name="action" value="save" />
 
  <div class="tab-content col-md-12" style="height: auto;background-color: #F7F7F7; margin-bottom: 15px;font-family: Calibri;text-align: left;padding-left: 0; padding-right: 0; border-bottom:1px solid #ddd ; border-left: 1px solid #ddd;border-right:1px solid #ddd; border-bottom-left-radius: 4px;  border-bottom-right-radius: 4px;">
-               
+
          <br><div class="tab-pane active" id="1">
-                   
+
                    <div class="col-md-12">
-				   
-					<div class="col-md-2">
+
+					<div class="col-md-4">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><strong for="idproyecto" >CODIGO</strong></span>
@@ -43,19 +66,6 @@
                     <input  id="idproyecto" name="idproyecto" type="text" class="form-control" style="background-color: white;" placeholder="Codigo proyecto" value="<?php echo $obj->idproyecto; ?>" readonly  />
                     </div>
 					</div>
-                    </div>
-					
-					<div class="col-md-10">
-                    <div class="form-group">
-					<div class="col-md-12 colpad">
-					<span class="input-group-addon"><label class="control-label"><strong for="nombre_proyecto">NOMBRE DE PROYECTO:</strong></label></span>
-					</div>
-					<div class="col-md-12 colpad">
-                    <textarea id="nombre_proyecto" name="nombre_proyecto" class="form-control" rows="2" placeholder="Nombre proyecto"><?php echo $obj->nombre_proyecto; ?></textarea>
-                    </div>
-					</div>
-                    </div>
-                       <div class="col-md-4">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="tipo_proyecto">TIPO PROYECTO: </strong></label></span>
@@ -65,11 +75,25 @@
                     </div>
 					</div>
                     </div>
-					
-                    </div> 
-					
+
+					<div class="col-md-8">
+                    <div class="form-group">
+					<div class="col-md-12 colpad">
+					<span class="input-group-addon"><label class="control-label"><strong for="nombre_proyecto">NOMBRE DE PROYECTO:</strong></label></span>
+					</div>
+					<div class="col-md-12 colpad ">
+                        <input id="nombre_proyecto" name="nombre_proyecto" type="text" class="form-control" placeholder="Nombre proyecto"  value="<?php /*echo $obj->nombre_proyecto; */?>" />
+                  <!-- <textarea id="nombre_proyecto" name="nombre_proyecto" class="form-control" rows="2" placeholder="Nombre proyecto"><?php /*echo $obj->nombre_proyecto; */?></textarea>-->
+
+                    </div>
+					</div>
+                    </div>
+
+
+                    </div>
+
                     <div class="col-md-12">
-					
+
 					<div class="col-md-4">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
@@ -80,7 +104,7 @@
                     </div>
 					</div>
                     </div>
-					
+
 					<div class="col-md-4">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
@@ -91,7 +115,7 @@
                     </div>
 					</div>
                     </div>
-					
+
 					<div class="col-md-4">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
@@ -102,12 +126,37 @@
                     </div>
 					</div>
                     </div>
-		
-                          
+
+
+                        <table id="tablaubi" width="60%" class="tablaubigeo" border="0px" cellpadding="1px" cellspacing="1px" style="" align="center">
+                            <thead>   
+                            <tr style="font-size: 16px; color: #555;background: #e8dceb" >
+                                    <td width="20%" align="center">
+                                       <b>DEPARTAMENTO</b>
+                                    </td>
+                                    <td width="20%" align="center">
+                                       <b>PROVINCIA</b>
+                                    </td>
+                                    <td width="20%" align="center">
+                                      <b>DISTRITO</b>
+                                    </td>
+                                    <td width="20%" align="center">
+                                        <b>ELIMINAR</b>
+                                    </td>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody id="datos">
+                                
+                            </tbody>
+                            
+                            </table>
+                        <br>
+                        <br>
                     </div>
-					
+
                     <div class="col-md-12">
-					
+
 					<div class="col-md-4">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
@@ -118,7 +167,7 @@
                     </div>
 					</div>
                     </div>
-					
+
 					<div class="col-md-4">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
@@ -129,7 +178,7 @@
                     </div>
 					</div>
                     </div>
-					
+
 					<div class="col-md-4">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
@@ -140,12 +189,12 @@
                     </div>
 					</div>
                     </div>
-					
+
                     </div>
-                    
+
                 <div class="col-md-12">
                     <div class="col-md-1"></div>
-					
+
 					<div class="col-md-5">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
@@ -156,7 +205,7 @@
                     </div>
 					</div>
                     </div>
-					
+
                     <div class="col-md-5">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
@@ -167,15 +216,15 @@
                     </div>
 					</div>
                     </div>
-		
+
                     <div class="col-md-1"></div>
-                </div> 
-                </div>  
-                    
-                <div class="tab-pane" id="2"> 
+                </div>
+                </div>
+
+                <div class="tab-pane" id="2">
                     <div class="col-md-12">
-					
-					<div class="col-md-6">
+
+					<div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="antecedentes_problema">ANTECEDENTES DEL PROBLEMA:</strong></label></span>
@@ -185,8 +234,11 @@
                     </div>
 					</div>
                     </div>
-					
-					<div class="col-md-6">
+                        </div>
+
+                        <div class="col-md-12">
+
+					<div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="definicion_problema">DEFINICION DEL PROBLEMA:</strong></label></span>
@@ -196,12 +248,12 @@
                     </div>
 					</div>
                     </div>
-					
+
                     </div>
-					
+
 					<div class="col-md-12">
-					
-					<div class="col-md-6">
+
+					<div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="formulacion_problema">FORMULACION DE PROBLEMA:</strong></label></span>
@@ -211,8 +263,8 @@
                     </div>
 					</div>
                     </div>
-					
-					<div class="col-md-6">
+
+					<div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="justificacion">JUSTIFICACION:</strong></label></span>
@@ -222,12 +274,12 @@
                     </div>
 					</div>
                     </div>
-					
+
                     </div>
-					
+
 					<div class="col-md-12">
-					
-					<div class="col-md-6">
+
+					<div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="importancia">IMPORTANCIA:</strong></label></span>
@@ -237,8 +289,10 @@
                     </div>
 					</div>
                     </div>
-					
-					<div class="col-md-6">
+                                             </div>
+			<div class="col-md-12">
+
+					<div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="limitaciones">LIMTACIONES:</strong></label></span>
@@ -248,14 +302,14 @@
                     </div>
 					</div>
                     </div>
-					
+
                     </div>
-					
+
                 </div>
 				<div class="tab-pane" id="3">
                     <div class="col-md-12">
-					
-					<div class="col-md-6">
+
+					<div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="objetivo_general">OBJETIVO GENERAL:</strong></label></span>
@@ -265,51 +319,29 @@
                     </div>
 					</div>
                     </div>
-                        <style>
-                            
-                        </style>	
-                        
-					<div class="col-md-6">
+                        </div>
+           <div class="col-md-12">
+					<div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="objetivos_especificos">OBJETIVOS ESPECIFICOS:</strong></label></span>
 					</div>
                         <div class="col-md-12 colpad" id="objesp">
                                             <textarea id="objetivos_especificos" name="objetivos_especificos" class="form-control" rows="4" placeholder="Objetivos Especificos"></textarea>
-                                            
-                                            <button class="btn push_button_success btn-success" style="padding: 3px;font-size: 11px;" name="newobj" id="newobj" type="button">AÑADIR</button>
-                                            <button class="btn push_button_success btn-success" style="padding: 3px;font-size: 11px;" name="dltobj" id="dltobj" type="button">QUITAR</button>
-                                           <br><br>
-                                           
-                                            
-                                        <input type="hidden" name='conta' id='conta'> 
+
                         </div>
-                        
-                        <div class="col-md-12 colpad">
-                            <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th><font><font>OBJETIVO</font></font></th>
-          <th><font><font>DESCRIPCION</font></font></th>
-        </tr>
-      </thead>
-      <tbody id='ooo'>
-      </tbody>
-    </table>
-                            
-                        </div>
-                        
+
                     </div>
                     </div>
-					
+
                     </div>
-                        
+
                 </div>
-                
+
                 <div class="tab-pane" id="4">
 					<div class="col-md-12">
-					
-					<div class="col-md-6">
+
+					<div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="antecedentes_investigacion">ANTECEDENTES DE LA INVESTIGACION:</strong></label></span>
@@ -319,8 +351,11 @@
                     </div>
 					</div>
                     </div>
-					
-					<div class="col-md-6">
+                                            </div>
+
+			<div class="col-md-12">
+
+					<div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="definicion_terminos">DEFINICION DE TERMINOS:</strong></label></span>
@@ -330,12 +365,12 @@
                     </div>
 					</div>
                     </div>
-					
+
                     </div>
-					
+
 					<div class="col-md-12">
-					
-					<div class="col-md-6">
+
+					<div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="bases_teoricas">BASES TEORICAS:</strong></label></span>
@@ -345,8 +380,9 @@
                     </div>
 					</div>
                     </div>
-					
-					<div class="col-md-6">
+                                            </div>
+			<div class="col-md-12">
+					<div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="hipotesis">HIPOTESIS:</strong></label></span>
@@ -356,12 +392,12 @@
                     </div>
 					</div>
                     </div>
-					
+
                     </div>
-					
+
                     <div class="col-md-12">
-					
-                    <div class="col-md-6">
+
+                    <div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="sistema_variables">SISTEMA DE VARIABLES:</strong></label></span>
@@ -371,8 +407,10 @@
                     </div>
 					</div>
                     </div>
-					
-                    <div class="col-md-6">
+                      </div>
+                    <div class="col-md-12">
+
+                    <div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="escala_medicion">ESCALA DE MEDICION:</strong></label></span>
@@ -382,16 +420,16 @@
                     </div>
 					</div>
                     </div>
-					
+
                     </div>
-					
+
                 </div>
-                    
+
                 <div class="tab-pane" id="5">
-                    
+
                     <div class="col-md-12">
-					
-                    <div class="col-md-6">
+
+                    <div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="tipo_investigacion">TIPO DE INVESTIGACION:</strong></label></span>
@@ -401,8 +439,9 @@
                     </div>
 					</div>
                     </div>
-					
-                    <div class="col-md-6">
+                        </div>
+		 <div class="col-md-12">
+                    <div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="nivel_investigacion">NIVEL DE INVESTIGACION:</strong></label></span>
@@ -412,12 +451,12 @@
                     </div>
 					</div>
                     </div>
-					
+
                     </div>
-                    
+
                     <div class="col-md-12">
-					
-                    <div class="col-md-6">
+
+                    <div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="disenio_investigacion">DISEÑO DE INVESTIGACION:</strong></label></span>
@@ -427,8 +466,9 @@
                     </div>
 					</div>
                     </div>
-					
-                    <div class="col-md-6">
+                         </div>
+		<div class="col-md-12">
+                    <div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="cobertura_investigacion">COBERTURA DE INVESTIGACION:</strong></label></span>
@@ -438,12 +478,12 @@
                     </div>
 					</div>
                     </div>
-					
+
                     </div>
-                    
+
                     <div class="col-md-12">
-					
-                    <div class="col-md-6">
+
+                    <div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="fuente_investigacion">FUENTE DE INVESTIGACION:</strong></label></span>
@@ -453,8 +493,9 @@
                     </div>
 					</div>
                     </div>
-					
-                    <div class="col-md-6">
+                        </div>
+                <div class="col-md-12">
+                    <div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="tecnicas_investigacion">TECNICAS DE INVESTIGACION:</strong></label></span>
@@ -464,12 +505,12 @@
                     </div>
 					</div>
                     </div>
-					
+
                     </div>
-                    
+
                     <div class="col-md-12">
-					
-                    <div class="col-md-6">
+
+                    <div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="instrumentos_invesitgacion">INSTRUMENTOS DE INVESTIGACION:</strong></label></span>
@@ -479,8 +520,9 @@
                     </div>
 					</div>
                     </div>
-					
-                    <div class="col-md-6">
+                        </div>
+			<div class="col-md-12">
+                    <div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="presentacion_datos">PRESENTACION DE DATOS:</strong></label></span>
@@ -490,12 +532,12 @@
                     </div>
 					</div>
                     </div>
-					
+
                     </div>
-                    
+
                     <div class="col-md-12">
-					
-                    <div class="col-md-6">
+
+                    <div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="analisis_datos">ANALISIS DE DATOS:</strong></label></span>
@@ -505,8 +547,9 @@
                     </div>
 					</div>
                     </div>
-					
-                    <div class="col-md-6">
+                        </div>
+		 <div class="col-md-12">
+                    <div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="interpretacion_datos">INTERPRETACION DE DATOS</strong></label></span>
@@ -516,17 +559,19 @@
                     </div>
 					</div>
                     </div>
-					
+
                     </div>
-                   
-                    
-                        
+
+
+
                 </div>
-                    
+
                 <div class="tab-pane" id="6">
-                    <div class="col-md-12">
-					
-					<div class="col-md-6">
+                    <div class="col-md-4">
+                    </div>
+                    <div class="col-md-8">
+
+					<div class="col-md-4">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="presupuesto">PRESUPUESTO:</strong></label></span>
@@ -536,7 +581,8 @@
                     </div>
 					</div>
                     </div>
-                        <div class="col-md-6">
+
+                        <div class="col-md-4">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="financiamiento">FINANCIAMIENTO:</strong></label></span>
@@ -545,12 +591,14 @@
                     <input id="financiamiento" name="financiamiento" type="text" class="form-control" placeholder="Financiamiento"  value="<?php echo $obj->financiamiento; ?>" />
                     </div>
 					</div>
-                    </div>	
                     </div>
-                    
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+
                     <div class="col-md-12">
-					
-                    <div class="col-md-6">
+
+                    <div class="col-md-12">
                     <div class="form-group">
 					<div class="col-md-12 colpad">
 					<span class="input-group-addon"><label class="control-label"><strong for="asignacion_recursos">ASIGNACION RECURSOS:</strong></label></span>
@@ -559,24 +607,27 @@
                     <textarea id="asignacion_recursos" name="asignacion_recursos" class="form-control" rows="4" placeholder="Interpretacion de Datos"><?php echo $obj->asignacion_recursos; ?></textarea>
                     </div>
 					</div>
-                    </div>	
                     </div>
-                                      
-                    
+                        </div>
+
+
+
             </div>
 				</div>
-				
+
 				<div class="form-group">
                             <div class="col-lg-6 col-lg-offset-3">
-                                
-                        <button id="save" style="font-size: 10px;padding: 4px; " type="submit" class="btn push_button_success btn-success" >GRABAR</button>
+
+                        <a id="save" style="font-size: 10px;padding: 4px; " class="btn btn-success" onclick="validarForm()">GRABAR</a> <!--//tinyMCE.execCommand('mceSave')-->
                         <a href="index.php?controller=proyecto" style="color: #fff;background-color: #d9534f;border-color: #d43f3a;" class="button">ATRAS</a>
                         <button type="button" style="font-size: 10px;padding: 4px;" class="btn push_button_warning btn-warning" id="resetBtn">LIMPIAR FORM</button>
                             </div>
-                        </div>                
-                        
-                        
+                        </div>
+
+
                     </form>
                 </div>
             </section>
     </div>
+    
+   

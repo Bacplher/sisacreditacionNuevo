@@ -23,7 +23,9 @@
     </div>
   
   
-  
+  <div id="generales">
+      
+  </div>
 
  
  
