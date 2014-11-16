@@ -12,9 +12,8 @@ class Controller {
         throw new ControllerException("Error! El método {$name}  no está definido.");
     }
 
-
     public function Select($p) {
-    
+        
         $obj = new Main();
         $obj->table = $p['table'];
         $data = array();
@@ -250,21 +249,6 @@ class Controller {
         $view->setTemplate('../view/_Select_ajax.php');
         return $view->renderPartial();
     }
-    public function Select_tipo_biblio($p) {
-        $obj = new Main();
-        $obj->table = $p['table'];
-        $obj->filtro = 0;
-        $obj->criterio = 0;
-        $data = array();
-        $data['rows'] = $obj->getList_ajax();
-        $data['name'] = $p['name'];
-        $data['id'] = $p['id'];
-        $data['disabled'] = $p['disabled'];
-        $view = new View();
-        $view->setData($data);
-        $view->setTemplate('../view/_Edit_Silabo_biblio.php');
-        return $view->renderPartial();
-    }
     
     
 
@@ -378,25 +362,7 @@ class Controller {
 //        return $view->renderPartial();
 //    }
     
-        public function genSilabo($p){
-        $obj = new Main();
-//        $obj->table = $p['table'];
-        $obj->filtro = 0;
-        $obj->criterio = 0;
-         $obj->filtro1 = $p['filtro1'];
-         $obj->filtro2 = $p['filtro2'];
-
-        $data = array();
-        $data['rows'] = $obj->silDG();
-        $data['rows2'] = $obj->silUni();
-        $data['rows3'] = $obj->getTema();
-        $data['rows4'] = $obj->getBibliografia();
-        $data['disabled'] = $p['disabled'];
-        $view = new View();
-        $view->setData($data);
-        $view->setTemplate('../view/_generarSilabo.php');
-        return $view->renderPartial();
-    }
+    
     public function Lista_recibir_A2($p) {
         $obj = new Main();
 //        $obj->table = $p['table'];
@@ -407,7 +373,6 @@ class Controller {
         $data = array();
         $data['rows'] = $obj->getListaA();
         $data['rows2'] = $obj->getSyllabus_P();
-        $data['rows3'] = $obj->getRetornoN();
         
 //        $data['name'] = $p['name'];
 //        $data['id'] = $p['id'];
@@ -439,18 +404,22 @@ class Controller {
     }
     public function Lista_notas($p) {
         $obj = new Main();
+//        $obj->table = $p['table'];
+        
         $obj->criterio = $p['criterio'];
         $obj->criterio1 = $p['criterio1'];
-        $obj->criterio2 = $p['criterio2'];
         $data = array();
-        $data['rows'] = $obj->getRetornoN();
+        $data['rows3'] = $obj->getRetornoN();
+        
+        
+//        $data['name'] = $p['name'];
+//        $data['id'] = $p['id'];
         $data['disabled'] = $p['disabled'];
         $view = new View();
         $view->setData($data);
-       $view->setTemplate('../view/_nota.php');
+       $view->setTemplate('../view/_tablaN.php');
         return $view->renderPartial();
     }
-    //holaaaaaaaaaa
 // mando la lista de los cursos del docente x la carga academica segun el semestre seleccionado
     public function lista_recibir_D($p) {
         $obj = new Main();
@@ -460,9 +429,7 @@ class Controller {
          $obj->filtro1 = $p['filtro1']; 
         $obj->criterio1 = $p['criterio1'];
         $data = array();
-        $data["id"] = $p['criterio'];
         $data['rows'] = $obj->getListaD();
-        $data['rows2'] = $obj->estadoSil();
 //        $data['name'] = $p['name'];
 //        $data['id'] = $p['id'];
         $data['disabled'] = $p['disabled'];
@@ -492,18 +459,15 @@ class Controller {
     }
     
      public function detalle_silabus($p) {
-       
         $obj = new Main();
 //        $obj->table = $p['table'];
         $obj->filtro = $p['filtro'];
         $obj->criterio = $p['criterio'];
-        $obj->filtro1 = $p['filtro1'];
+         $obj->filtro1 = $p['filtro1'];
         $obj->criterio1 = $p['criterio1'];
         
         $data = array();
         $data['rows'] = $obj->getdatos_Silabu();
-        $data['rows2'] = $obj->getBibliografia();
-
 
         $data['disabled'] = $p['disabled'];
         $view = new View();
@@ -511,20 +475,6 @@ class Controller {
         $view->setTemplate('../view/_Edit_Silabo.php');
         return $view->renderPartial();
     }
-
-     public function bibliografia_silabus($p) {
-       
-        $obj = new Main();
-        $datab = array();
-        $datab['rows22'] = $obj->getBibliografia();
-        //print_r(($datab['rows22']));
-        $datab['disabled'] = $p['disabled'];
-        $view = new View();
-        $view->setData($datab);
-        $view->setTemplate('../view/_Edit_Silabo_biblio.php');
-        return $view->renderPartial();
-    }
-
     
      public function unidad_recibir($p) {
         $obj = new Main();
@@ -536,7 +486,6 @@ class Controller {
         $obj->opt = $p['option'];
         
         
-
         $data = array();
         $data['rows'] = $obj->getUnidad();
         if($obj->opt=='dsa'){
@@ -661,17 +610,6 @@ class Controller {
         }
         }
         
-        return $view->renderPartial();
-    }
-    public function evaluacion_recibir($p) {
-        $obj = new Main();
-        $obj->criterio = $p['criterio'];
-        $data = array();
-        $data['rows'] = $obj->getEvaluacion();
-        $data['disabled'] = $p['disabled'];
-        $view = new View();
-        $view->setData($data);
-        $view->setTemplate('../view/_evaluacion.php');
         return $view->renderPartial();
     }
     
@@ -908,8 +846,9 @@ class Controller {
         $view = new View();
         $view->setData($data);
         $view->setTemplate('../view/_Detalle.php');
-        return $view->renderPartial();
-        
+        $view->setLayout('../template/Layout.php');
+        return $view->render();
+       
     } 
     
     public function Detalle_Proyecto1_P($p) {

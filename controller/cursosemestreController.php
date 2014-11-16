@@ -4,20 +4,16 @@ require_once '../lib/Controller.php';
 require_once '../lib/View.php';
 require_once '../model/alumno.php';
 require_once '../model/silabus.php';
-require_once '../model/tema.php';
-require_once '../model/calificacion.php';
-require_once '../model/bibliografia.php';
-require_once '../model/unidad.php';
-require_once '../model/evaluacion.php';
-
 
 class cursosemestreController extends Controller {
 
     public function index() {
 
         $data = array();
-        $data['semestreacademico'] = $this->SelectD(array('id' => 'semestreacademico', 'name' =>'semestreacademico','filtro'=>$_SESSION['idusuario']));
-        // die($_SESSION['idusuario']);
+$data['semestreacademico'] = $this->SelectD(array('id' => 'semestreacademico', 'name' =>'semestreacademico','filtro'=>$_SESSION['idusuario']));
+         
+        
+// die($_SESSION['idusuario']);
         $view = new View();
         $view->setData($data);
         $view->setTemplate('../view/cursosemestre/_Index.php');
@@ -25,13 +21,7 @@ class cursosemestreController extends Controller {
         $view->render();
     }
 
-    public function  generarsilabo(){
-       $codsemestre=$_GET["CodSemestre"];
-        $codcurso= $_GET["CodCurso"];
-       $codsilabo=$_GET["CodSilabo"];
-       $envio = $this->genSilabo(array('filtro' => $codsemestre,'filtro1' =>$codcurso,'filtro2'=> $codsilabo));
-       echo $envio;
-    }
+    
     
     public function getCursosD()
        {
@@ -76,16 +66,6 @@ class cursosemestreController extends Controller {
       echo $envio;
         
        }
-       public function  getCalificaciones()
-        {
-           $semestre=$_POST["idsemestre"];
-           $curso=$_POST["idcurso"];
-           $alumno=$_POST["idalumno"];
-           $envio=$this->Lista_notas(array('criterio' => $curso,'criterio1' =>$semestre, 'criterio2' =>$alumno));      
-       
-        echo $envio;
-           
-        }
        public function getSillabysD()
        {
         $codcurso=$_POST["Codigo"];
@@ -102,39 +82,20 @@ class cursosemestreController extends Controller {
        
          public function getEdiSillabus()
        {
-        
-        //print_r($_POST);exit();
         $codcurso=$_POST["Codigo"];
-        $codsemestre=$_POST["codemestre"];
-
-
+        $codsemestre=$_POST["idSemestre"];
         
         $envio=$this->detalle_silabus(array('filtro' => 'CodigoCurso','filtro1' =>'CodigoSemestre','criterio' => $codcurso,'criterio1' => $codsemestre));      
 //        echo $codcurso;
 //        echo $codsemestre;
-       
-        echo $envio;
+      echo $envio;
         
-       }
-      public function getEdiSillabusBiblio(){
-        //print_r($_POST);exit();
-        //$codSilabo=$_POST["silabo"];
-        $codSilabo=1;
-        $envio=$this->bibliografia_silabus(array('criterio22' => $codSilabo));   
-//        echo $codcurso;
-//        echo $codsemestre;
-               
-        echo $envio;
        }
        
        public function getUnidad ()
        {
-
-
-
         $codcurso=$_POST["CodigoCurso"];
         $codsemestre= $_POST["idSemestre"];
-        
         $opt=$_POST['sin'];
         
         $envio=$this->unidad_recibir(array('filtro' => 'CodigoCurso','filtro1' =>'CodigoSemestre','criterio' => $codcurso,'criterio1' => $codsemestre,'option' => $opt));      
@@ -152,21 +113,12 @@ class cursosemestreController extends Controller {
         $opt="A";
         
         $envio=$this->unidad_recibir(array('filtro' => 'CodigoCurso','filtro1' =>'CodigoSemestre','criterio' => $codcurso,'criterio1' => $codsemestre,'option' => $opt));      
+       
         echo $envio;
+        
        }
-        public function editarSilabo () {
-        //print_r($_POST); exit();
-        $obj = new silabus();
-        $p = $obj-> actualizar_silabo($_POST);      
-       }
-       public function  enviarNota(){
-         $obj = new calificacion();
-         $p = $obj-> insert($_POST);  
-       }
-       public function  editarNota(){
-         $obj = new calificacion();
-         $p = $obj-> update($_POST);  
-       }
+       
+       
        public function getTema()
        {
         $unidad=$_POST["Codigo"];
@@ -177,39 +129,6 @@ class cursosemestreController extends Controller {
         echo $envio;
         
        }
-      public function getEvaluacion(){
-        $unidad=$_POST["Codigo"];
-        $envio=$this->evaluacion_recibir(array('criterio' => $unidad));
-        echo $envio;
-       }
-      public function editarTema() {
-        $obj = new tema();
-        $p = $obj-> actualizar_tema($_POST);      
-       }
-
-//aqui toy
-       public function editarBiblio() {
-        $obj = new bibliografia();
-        $p = $obj-> actualizar_bibliografia($_POST);      
-       }
-
-//aqui toy
-       public function editarBiblio_tipo() {
-        $obj = new bibliografia();
-        $p = $obj-> actualizar_bibliografia_tipo($_POST);      
-       }
-
-//aqui toy editar editarUni_nombre
-       public function editarUni_nombre() {
-        $obj = new unidad();
-        $p = $obj-> actualizar_unidad_nombre($_POST);      
-       }
-//aqui toy editarEva_tipo
-        public function editarEva_tipo() {
-        $obj = new evaluacion();
-        $p = $obj-> actualizar_evaluacion_tipo($_POST);      
-       }
-       
        
        public function getEditN() 
        {
@@ -253,7 +172,18 @@ class cursosemestreController extends Controller {
 //        
 //       }
        
-
+       public function  getCalificaiones()
+        {
+           $semestre=$_POST["idsemestre"];
+           $curso=$_POST["idcurso"];
+ 
+       
+        
+        $envio=$this->Lista_notas(array('criterio' => $curso,'criterio1' =>$semestre));      
+       
+        echo $envio;
+           
+        }
         ///faltaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
         public function getAsistencia() 
        {
@@ -298,12 +228,7 @@ class cursosemestreController extends Controller {
     }
 
     public function save() {
-       
-        $obj = new silabus();
-        $p = $obj->insert($_POST);
-        
-
-        /*if (isset($_SESSION["perfil"]) && ($_SESSION["perfil"] == 'PROFESOR')) {
+        if (isset($_SESSION["perfil"]) && ($_SESSION["perfil"] == 'PROFESOR')) {
             $obj = new silabus();
             if ($_POST['idsilabus'] == '') {
                 $p = $obj->insert($_POST);
@@ -334,7 +259,7 @@ class cursosemestreController extends Controller {
                     $view->render();
                 }
             }
-        } */
+        } 
     }
 
     public function delete() {
@@ -373,10 +298,7 @@ class cursosemestreController extends Controller {
         $ofic = $this->Select_ajax(array('id' => 'idcriterio', 'name' => 'idcriterio', 'table' => 'vista_cargaacademica', 'filtro' => 'carga_academica', 'criterio' => $_POST['idcargaacademica']));
         echo $ofic;
     }
-  function getTipoBiblio() {
-        $ofic2 = $this->Select_tipo_biblio(array('id' => 'idcriterio', 'name' => 'idcriterio', 'table' => 'tipo_bibliografia'));
-        echo $ofic2;
-    }
+
 
        
        //Syllabussss FINNNNNNNNNN

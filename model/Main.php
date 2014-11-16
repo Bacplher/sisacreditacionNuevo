@@ -1,3 +1,4 @@
+
 <?php
 
 class Main {
@@ -18,7 +19,6 @@ class Main {
             header("Location:index.php?controller=BaseDatos&action=orror&str=" . $error);
         }
     }
-
 
     public function Query($partSQL) {
 
@@ -56,32 +56,6 @@ class Main {
                         order by    semestreacademico.CodigoSemestre desc limit 0,5";
 
         $sth = $this->db->prepare($query);
-        $sth->execute();
-        return $sth->fetchAll();
-    }
-    function silDG(){
-        $query = "SELECT cu.DescripcionCurso, cu.Creditos, cu.TipoCurso, cu.Ciclo, cu.CodCursoSira,
-            ac.DescripcionArea, cu.HorasTeoria, cu.HorasPractica, si.idsilabus,
-             si.sumilla, si.metodologia, si.competencia, sac.Abreviatura, sac.FechaInicio, sac.FechaTermino, 
-             ca.CodigoCurso, CONCAT(pro.NombreProfesor,' ', pro.ApellidoPaterno,' ',pro.ApellidoMaterno),si.objetivo,
-             cu.OrdenSegunPlan
-            from cursos as cu inner join areacurricular as ac on
-            cu.CodigoAreaCurricular = ac.CodigoAreaCurricular inner join carga_academica as ca on
-            cu.CodigoCurso = ca.CodigoCurso inner join  silabus as si on
-            ca.idcargaacademica = si.idcargaacademica inner join semestreacademico as sac on
-            ca.CodigoSemestre = sac.CodigoSemestre inner join profesores as pro on
-            ca.CodigoProfesor = pro.CodigoProfesor
-            where idsilabus = {$this->filtro2} ";
-        $sth = $this->db->prepare($query);
-        $sth->bindValue(':filtro2', $this->filtro2, PDO::PARAM_INT);
-        $sth->execute();
-        return $sth->fetchAll();
-    }
-    function silUni(){
-        $query = "SELECT idunidad,nombreunidad, descripcionunidad, duracion, competencia,porcentaje from unidad  
-            where idsilabus = {$this->filtro2} ";
-        $sth = $this->db->prepare($query);
-        $sth->bindValue(':filtro2', $this->filtro2, PDO::PARAM_INT);
         $sth->execute();
         return $sth->fetchAll();
     }
@@ -130,10 +104,9 @@ class Main {
         return $sth->fetchAll();
     }
 
-
    function getRetornoN(){
         
-         $query = "SELECT 
+         $query = "select 
                         distinct
                         C.CodigoAlumno,
                         C.nota,
@@ -150,11 +123,13 @@ class Main {
                         inner join carga_academica as CA on
                         S.idcargaacademica=CA.idcargaacademica
 
-                        WHERE  CodigoCurso='{$this->criterio}' and CodigoSemestre='{$this->criterio1}'";
+                        WHERE
+
+                        CA.CodigoCurso='{$this->criterio}' and Ca.CodigoSemestre='{$this->criterio1}'";
 
         $sth = $this->db->prepare($query);
-        $sth->bindValue(':criterio', $this->criterio, PDO::PARAM_INT);
-       $sth->bindValue(':criterio1', $this->criterio1, PDO::PARAM_INT);
+        $sth->bindValue(':criterio', $this->criterio, PDO::PARAM_STR);
+       $sth->bindValue(':criterio1', $this->criterio1, PDO::PARAM_STR);
         $sth->execute();
 //    var_dump($sth);
 //    exit();
@@ -256,7 +231,6 @@ Inner Join evento ON evento.idevento = detalle_asistencia_alumno_tutoria.idevent
         $query = "select 
                         C.CodigoCurso,
                         C.DescripcionCurso,
-                        C.creditos,
                         P.NombreProfesor,
                         DM.CodigoCurso,
                         DM.CodigoSemestre
@@ -280,7 +254,7 @@ Inner Join evento ON evento.idevento = detalle_asistencia_alumno_tutoria.idevent
                         evento.tema,
                         tipo_evento.descripcion,
                         evento.fecha,
-            case when ( detalle_asistencia_alumno_tutoria.asistencia_alumno=1 and detalle_asistencia_alumno_tutoria.idevento=evento.idevento )  then 'Asistio' else ' No Asistio ' end Estado
+			case when ( detalle_asistencia_alumno_tutoria.asistencia_alumno=1 and detalle_asistencia_alumno_tutoria.idevento=evento.idevento )  then 'Asistio' else ' No Asistio ' end Estado
                         FROM
                         tipo_evento
                         Inner Join evento ON evento.idevento = tipo_evento.idtipo_evento
@@ -329,10 +303,9 @@ Inner Join evento ON evento.idevento = detalle_asistencia_alumno_tutoria.idevent
     }
 
     function getListaA() {
-        $query = "SELECT 
+        $query = "select 
                         A.CodigoAlumno,
-                        concat(A.NombreAlumno,' ',A.ApellidoPaterno,' ',A.ApellidoMaterno) as alumno,
-                        A.CodAlumnoSira
+                        concat(A.NombreAlumno,' ',A.ApellidoPaterno,' ',A.ApellidoMaterno) as alumno
                         from detalle_matricula as DM
                         inner join alumnos AS A on A.CodigoAlumno = DM.CodigoAlumno
                         inner join cursos as C on C.CodigoCurso = DM.CodigoCurso
@@ -374,8 +347,7 @@ Inner Join evento ON evento.idevento = detalle_asistencia_alumno_tutoria.idevent
                         CA.CodigoCurso,
                         CA.CodigoSemestre,
                         C.DescripcionCurso,
-                       TE.descripcion,
-                       U.nombreunidad
+                       TE.descripcion
                         from evaluacion as E
                         inner join unidad as U on U.idunidad = E.idunidad
                         inner join silabus as S on S.idsilabus = U.idsilabus
@@ -447,15 +419,6 @@ Inner Join evento ON evento.idevento = detalle_asistencia_alumno_tutoria.idevent
 //        exit();
         return $sth->fetchAll();
     }
-    function estadoSil() {
-        $query = "SELECT CodigoCurso from carga_academica inner join silabus on 
-        carga_academica.idcargaacademica = silabus.idcargaacademica
-            where CodigoSemestre= {$this->criterio} and CodigoProfesor= {$this->criterio1}
-        ";
-        $sth = $this->db->prepare($query);
-        $sth->execute();
-        return $sth->fetchAll();
-    }
 
     function getSilabu() {
         $query = "select
@@ -478,19 +441,7 @@ Inner Join evento ON evento.idevento = detalle_asistencia_alumno_tutoria.idevent
         return $sth->fetchAll();
     }
 
-    function getBibliografia() {
-        $query = "SELECT bi.idbibliografia, bi.referencia, bi.descripcion, tb.idtipo_bibliografia,
-                        tb.descripcion_tipobibliografia, bi.identificador
-                 FROM bibliografia as bi inner join tipo_bibliografia as tb on
-                    tb.idtipo_bibliografia = bi.idtipo_bibliografia
-                     WHERE referencia ='$this->filtro2' and identificador = 1 ";
-        $sth = $this->db->prepare($query);
-        $sth->execute();
-        return $sth->fetchAll();
-    }
     function getdatos_Silabu() {
-
-
         $query = "select
                             distinct
                              silabus.competencia,
@@ -516,10 +467,7 @@ Inner Join evento ON evento.idevento = detalle_asistencia_alumno_tutoria.idevent
                                U.nombreunidad,
                                U.idunidad,
                                CA.CodigoSemestre,
-                               CA.CodigoCurso,
-                               U.descripcionunidad,
-                               U.competencia,
-                               U.porcentaje
+                               CA.CodigoCurso
                                 from unidad as U
                                 inner join silabus as S on S.idsilabus = U.idsilabus
                                 inner join carga_academica as CA on CA.idcargaacademica = S.idcargaacademica
@@ -606,10 +554,10 @@ Inner Join evento ON evento.idevento = detalle_asistencia_alumno_tutoria.idevent
 
     function getTema() {
         $query = " SELECT distinct 
-                 semana, contenido, conceptual, procedimental, actitudinal, tema.idtema,idunidad,clase.fecha,clase.idtema,clase.idclase
+                 semana, contenido, conceptual, procedimental, actitudinal, competencia,tema.idtema,idunidad,clase.fecha,clase.idtema,clase.idclase
                             FROM tema
-                left join clase on 
-                tema.idtema=clase.idtema
+				left join clase on 
+				tema.idtema=clase.idtema
                                 WHERE 
                                 {$this->filtro}={$this->criterio}";
 
@@ -617,13 +565,6 @@ Inner Join evento ON evento.idevento = detalle_asistencia_alumno_tutoria.idevent
         $sth->execute();
 //        var_dump($sth);
 //        exit();
-        return $sth->fetchAll();
-    }
-    function getEvaluacion() {
-        $query = "SELECT idtipo_evaluacion, descripcionevaluacion, fecha, ponderado,idevaluacion FROM `evaluacion`
-                  WHERE idunidad= {$this->criterio} ";
-        $sth = $this->db->prepare($query);
-        $sth->execute();
         return $sth->fetchAll();
     }
 
@@ -653,7 +594,7 @@ Inner Join evento ON evento.idevento = detalle_asistencia_alumno_tutoria.idevent
 
                             from (
 
-                            select  alumnos.CodigoAlumno, Alumnos.ApellidoPaterno, 
+                            select 	alumnos.CodigoAlumno, Alumnos.ApellidoPaterno, 
 
                             case when evaluacion.idevaluacion mod 11 = 1 then nota end Eval1,
 
@@ -753,8 +694,8 @@ Inner Join evento ON evento.idevento = detalle_asistencia_alumno_tutoria.idevent
                         proyecto.periodo_ejecucion,
                         CONCAT(profesores.ApellidoPaterno,' ',profesores.ApellidoMaterno,' ',profesores.NombreProfesor) AS Responsable,
                         escuelaprofesional.DescripcionEscuela,
-                        estado_proyecto.descripcion,
-                        MAX(DISTINCT(control_proyecto.fecha)) as Fecha_Inicio,
+                        proceso_proyecto.nombre,
+                       0,
                     
                         proyecto.presupuesto,
               
@@ -763,23 +704,21 @@ Inner Join evento ON evento.idevento = detalle_asistencia_alumno_tutoria.idevent
                         linea_investigacion.nombre_linea,
                         eje_tematico.nombre_ejetematico,
                         grupo.nombre_grupo,
-                        `ubigeos$`.DISTRITO,
-                        `ubigeos$`.PROVINCIA,
-                        `ubigeos$`.DEPARTAM,
-                        estado_proyecto.idestado_proyecto
+                        0,
+                       0,
+                      0,
+                       proceso_proyecto.idproceso_proyecto
                         FROM
                         proyecto
                         INNER JOIN detalle_profesor_proy_fun ON proyecto.idproyecto = detalle_profesor_proy_fun.idproyecto
                         INNER JOIN profesores ON profesores.CodigoProfesor = detalle_profesor_proy_fun.CodigoProfesor
-                        INNER JOIN control_proyecto ON proyecto.idproyecto = control_proyecto.idproyecto
-                        INNER JOIN estado_proyecto ON control_proyecto.idestado_proyecto = estado_proyecto.idestado_proyecto
+                        INNER JOIN proceso_proyecto on(proceso_proyecto.idproceso_proyecto=proyecto.estado_proyecto)
                         INNER JOIN escuelaprofesional ON proyecto.CodigoEscuela=escuelaprofesional.CodigoEscuela
                         INNER JOIN tipo_proyecto ON proyecto.idtipo_proyecto = tipo_proyecto.idtipo_proyecto
                         INNER JOIN facultades ON escuelaprofesional.CodigoFacultad = facultades.CodigoFacultad
                         INNER JOIN linea_investigacion ON proyecto.idlinea_investigacion = linea_investigacion.idlinea_investigacion
                         INNER JOIN eje_tematico ON linea_investigacion.idejetematico = eje_tematico.idejetematico
-                        INNER JOIN grupo ON eje_tematico.idgrupo = grupo.idgrupo
-                        INNER JOIN `ubigeos$` ON proyecto.Ubigeo = `ubigeos$`.UBIGEO
+                        INNER JOIN grupo ON eje_tematico.idgrupo = grupo.idgrupo               
                         
                         where detalle_profesor_proy_fun.idfuncion=2 and proyecto.situacion=1
                         GROUP BY proyecto.idproyecto
@@ -801,8 +740,8 @@ Inner Join evento ON evento.idevento = detalle_asistencia_alumno_tutoria.idevent
                         proyecto.periodo_ejecucion,
                         CONCAT(profesores.ApellidoPaterno,' ',profesores.ApellidoMaterno,' ',profesores.NombreProfesor) AS Responsable,
                         escuelaprofesional.DescripcionEscuela,
-                        estado_proyecto.descripcion,
-                        MAX(DISTINCT(control_proyecto.fecha)) as Fecha_Inicio,
+                        proceso_proyecto.nombre,
+                       0,
                     
                         proyecto.presupuesto,
               
@@ -811,27 +750,26 @@ Inner Join evento ON evento.idevento = detalle_asistencia_alumno_tutoria.idevent
                         linea_investigacion.nombre_linea,
                         eje_tematico.nombre_ejetematico,
                         grupo.nombre_grupo,
-                        `ubigeos$`.DISTRITO,
-                        `ubigeos$`.PROVINCIA,
-                        `ubigeos$`.DEPARTAM,
-                        estado_proyecto.idestado_proyecto
+                        0,
+                        0,
+                        0,
+                        proceso_proyecto.idproceso_proyecto
                         FROM
                         proyecto
                         INNER JOIN detalle_profesor_proy_fun ON proyecto.idproyecto = detalle_profesor_proy_fun.idproyecto
                         INNER JOIN profesores ON profesores.CodigoProfesor = detalle_profesor_proy_fun.CodigoProfesor
-                        INNER JOIN control_proyecto ON proyecto.idproyecto = control_proyecto.idproyecto
-                        INNER JOIN estado_proyecto ON control_proyecto.idestado_proyecto = estado_proyecto.idestado_proyecto
+
+                        INNER JOIN proceso_proyecto on(proceso_proyecto.idproceso_proyecto=proyecto.estado_proyecto)
+
                         INNER JOIN escuelaprofesional ON proyecto.CodigoEscuela=escuelaprofesional.CodigoEscuela
                         INNER JOIN tipo_proyecto ON proyecto.idtipo_proyecto = tipo_proyecto.idtipo_proyecto
                         INNER JOIN facultades ON escuelaprofesional.CodigoFacultad = facultades.CodigoFacultad
                         INNER JOIN linea_investigacion ON proyecto.idlinea_investigacion = linea_investigacion.idlinea_investigacion
                         INNER JOIN eje_tematico ON linea_investigacion.idejetematico = eje_tematico.idejetematico
                         INNER JOIN grupo ON eje_tematico.idgrupo = grupo.idgrupo
-                        INNER JOIN `ubigeos$` ON proyecto.Ubigeo = `ubigeos$`.UBIGEO
-                        
+                                          
                         where detalle_profesor_proy_fun.idfuncion=2 and proyecto.situacion=0
-                        GROUP BY proyecto.idproyecto
-                            ";
+                        GROUP BY proyecto.idproyecto";
 
         $sth = $this->db->prepare($query);
 //        $sth->bindValue(':criterio', $this->criterio, PDO::PARAM_STR);
@@ -860,32 +798,32 @@ Inner Join evento ON evento.idevento = detalle_asistencia_alumno_tutoria.idevent
                         `ubigeos$`.PROVINCIA,
                         `ubigeos$`.DEPARTAM,
                         proyecto.antecedentes_problema, 
-            proyecto.definicion_problema, 
-            proyecto.formulacion_problema, 
-            proyecto.justificacion, 
-            proyecto.importancia, 
-            proyecto.limitaciones, 
+			proyecto.definicion_problema, 
+			proyecto.formulacion_problema, 
+			proyecto.justificacion, 
+			proyecto.importancia, 
+			proyecto.limitaciones, 
                         proyecto.objetivo_general, 
-            proyecto.antecedentes_investigacion, 
-            proyecto.definicion_terminos, 
-            proyecto.bases_teoricas, 
-            proyecto.hipotesis, 
-            proyecto.sistema_variables, 
-            proyecto.escala_medicion, 
-            proyecto.tipo_investigacion, 
-            proyecto.nivel_investigacion, 
-            proyecto.disenio_investigacion, 
-                           proyecto.cobertura_investigacion, 
-                           proyecto.fuente_investigacion, 
-                           proyecto.tecnicas_investigacion, 
-                           proyecto.instrumentos_investigacion, 
-                           proyecto.presentacion_datos, 
-                           proyecto.analisis_datos, 
-                           proyecto.interpretacion_datos, 
-                           proyecto.presupuesto,
-                           proyecto.asignacion_recursos, 
-                           proyecto.financiamiento                         
-
+			proyecto.antecedentes_investigacion, 
+			proyecto.definicion_terminos, 
+			proyecto.bases_teoricas, 
+			proyecto.hipotesis, 
+			proyecto.sistema_variables, 
+			proyecto.escala_medicion, 
+			proyecto.tipo_investigacion, 
+			proyecto.nivel_investigacion, 
+			proyecto.disenio_investigacion, 
+						   proyecto.cobertura_investigacion, 
+						   proyecto.fuente_investigacion, 
+						   proyecto.tecnicas_investigacion, 
+						   proyecto.instrumentos_investigacion, 
+						   proyecto.presentacion_datos, 
+						   proyecto.analisis_datos, 
+						   proyecto.interpretacion_datos, 
+						   proyecto.presupuesto,
+						   proyecto.asignacion_recursos, 
+						   proyecto.financiamiento,                         
+                                                   estado_proyecto.idestado_proyecto
 
                         FROM
                         proyecto
@@ -1156,10 +1094,8 @@ Inner Join evento ON evento.idevento = detalle_asistencia_alumno_tutoria.idevent
                         facultades.DescripcionFacultad,
                         linea_investigacion.nombre_linea,
                         eje_tematico.nombre_ejetematico,
-                        grupo.nombre_grupo,
-                        `ubigeos$`.DISTRITO,
-                        `ubigeos$`.PROVINCIA,
-                        `ubigeos$`.DEPARTAM
+                        grupo.nombre_grupo
+                     
                         FROM
                         proyecto
                         INNER JOIN detalle_profesor_proy_fun ON proyecto.idproyecto = detalle_profesor_proy_fun.idproyecto
@@ -1172,15 +1108,15 @@ Inner Join evento ON evento.idevento = detalle_asistencia_alumno_tutoria.idevent
                         INNER JOIN linea_investigacion ON proyecto.idlinea_investigacion = linea_investigacion.idlinea_investigacion
                         INNER JOIN eje_tematico ON linea_investigacion.idejetematico = eje_tematico.idejetematico
                         INNER JOIN grupo ON eje_tematico.idgrupo = grupo.idgrupo
-                        INNER JOIN `ubigeos$` ON proyecto.Ubigeo = `ubigeos$`.UBIGEO
-                        
-            INNER JOIN detalleproyecto_matrixalumno ON proyecto.idproyecto=detalleproyecto_matrixalumno.idproyecto
+                       
+						
+			INNER JOIN detalleproyecto_matrixalumno ON proyecto.idproyecto=detalleproyecto_matrixalumno.idproyecto
                         INNER JOIN detalle_matricula ON detalleproyecto_matrixalumno.CodigoAlumno=detalle_matricula.CodigoAlumno
                         INNER JOIN matricula ON detalle_matricula.CodigoAlumno=matricula.CodigoAlumno
                         INNER JOIN alumnos ON matricula.CodigoAlumno=alumnos.CodigoAlumno
                         
                         where detalle_profesor_proy_fun.idfuncion=2 and
-            detalleproyecto_matrixalumno.CodigoAlumno='" . $codigo . "' AND detalleproyecto_matrixalumno.estado=1
+			detalleproyecto_matrixalumno.CodigoAlumno='" . $codigo . "' AND detalleproyecto_matrixalumno.estado=1
                         GROUP BY proyecto.idproyecto
                             ";
 
@@ -1218,23 +1154,21 @@ Inner Join evento ON evento.idevento = detalle_asistencia_alumno_tutoria.idevent
                                     facultades.DescripcionFacultad, 
                                     linea_investigacion.nombre_linea,
                                     eje_tematico.nombre_ejetematico, 
-                                    grupo.nombre_grupo,
-                                    `ubigeos$`.DISTRITO,
-                                    `ubigeos$`.PROVINCIA,
-                                    `ubigeos$`.DEPARTAM
+                                    grupo.nombre_grupo
+                                    
                         FROM
                         detalle_profesor_proy_fun
                         INNER JOIN proyecto ON proyecto.idproyecto = detalle_profesor_proy_fun.idproyecto
                         INNER JOIN profesores ON profesores.CodigoProfesor = detalle_profesor_proy_fun.CodigoProfesor
                         INNER JOIN control_proyecto ON proyecto.idproyecto = control_proyecto.idproyecto
-            INNER JOIN estado_proyecto ON control_proyecto.idestado_proyecto = estado_proyecto.idestado_proyecto
+			INNER JOIN estado_proyecto ON control_proyecto.idestado_proyecto = estado_proyecto.idestado_proyecto
                         INNER JOIN escuelaprofesional ON proyecto.CodigoEscuela=escuelaprofesional.CodigoEscuela
                         INNER JOIN tipo_proyecto ON proyecto.idtipo_proyecto = tipo_proyecto.idtipo_proyecto
                         INNER JOIN facultades ON escuelaprofesional.CodigoFacultad = facultades.CodigoFacultad
                         INNER JOIN linea_investigacion ON proyecto.idlinea_investigacion = linea_investigacion.idlinea_investigacion
                         INNER JOIN eje_tematico ON linea_investigacion.idejetematico = eje_tematico.idejetematico
                         INNER JOIN grupo ON eje_tematico.idgrupo = grupo.idgrupo
-                        INNER JOIN `ubigeos$` ON proyecto.Ubigeo = `ubigeos$`.UBIGEO
+                        
                                              
                         
                         where detalle_profesor_proy_fun.CodigoProfesor='" . $codigo . "' AND proyecto.situacion=1
@@ -1465,12 +1399,9 @@ Inner Join evento ON evento.idevento = detalle_asistencia_alumno_tutoria.idevent
 //         return $mensaje;
      
     }
-
-
+    }
 
 }
-
-            }
 
             
 

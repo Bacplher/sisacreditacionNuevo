@@ -24,8 +24,11 @@ class alumnoController extends Controller {
         $data['query'] = $_GET['q'];
         $data['pag'] = $this->Pagination(array('rows' => $data['data']['rowspag'], 'url' => 'index.php?controller=alumno&action=index', 'query' => $_GET['q']));
         $cols = array("CODIGO", "Nombre", "Apellidos", "Documentos", "Fecha Ingreso", "CodAlumnoSira");
+
         $opt = array("NombreAlumno" => "Nombre Alumno", "CodAlumnoSira" => "Codigo Sira ");
+
         $data['grilla'] = $this->grilla("alumno", $cols, $data['data']['rows'], $opt, $data['pag'], true, true);
+        
       
         $view = new View();
         $view->setData($data);

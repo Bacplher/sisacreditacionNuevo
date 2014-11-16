@@ -10,9 +10,6 @@ class alumnoproyectosController extends Controller {
 
         $data = array();
         $data['semestreacademico'] = $this->Select1(array('id' => 'semestreacademico', 'name' => 'semestreacademico', 'filtro' => $_SESSION['idusuario']));
-
-
-
         $view = new View();
         $view->setData($data);
         $view->setTemplate('../view/alumnoproyecto/_Index.php');
